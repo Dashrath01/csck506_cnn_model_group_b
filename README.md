@@ -81,7 +81,3 @@ evaluate_model(model_transfer, "DenseNet121_Transfer", history_transfer)
 * **Overfitting:** Custom CNNs trained from scratch on this dataset exhibit rapid overfitting. Regularisation (L2, Dropout) successfully smooths the loss curves but reveals a secondary issue: Majority Class Bias.
 * **Class Collapse:** Due to class imbalance, basic models often predict "Pneumonia" for almost all inputs, resulting in a high False Positive rate.
 * **Transfer Learning Superiority:** The DenseNet121 architecture, combined with Decision Threshold tuning ($\tau = 0.7$), provides the optimal solution. It significantly increases True Negatives (correctly identifying healthy patients) while maintaining near-perfect True Positives (identifying pneumonia).
-
-```
-
-```
