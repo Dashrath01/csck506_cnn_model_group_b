@@ -1,87 +1,32 @@
-```markdown
-# Pneumonia Detection from Chest X-Rays using Deep Learning
+# DenseNet-Pneumonia-Detector
 
-This repository contains a modular deep learning pipeline designed to classify chest radiographic images (X-rays) into two categories: **Normal** and **Pneumonia**. 
+An advanced, production-ready deep learning pipeline for the binary classification of Pneumonia vs. Normal chest X-rays, built using TensorFlow/Keras.
 
-The project demonstrates the iterative development of Convolutional Neural Networks (CNNs), starting from a shallow baseline model and culminating in a highly robust Transfer Learning architecture utilising DenseNet121.
+## Overview
+This repository addresses the primary challenges of medical image classification (class imbalance, overfitting, and the "black-box" nature of deep learning) by employing a two-stage Transfer Learning methodology atop the **DenseNet121** architecture, paired with Explainable AI (XAI) visualisations.
 
-## Dataset
-The dataset utilised is the [Chest X-Ray Images (Pneumonia)](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia) dataset from Kaggle. It contains 5,863 JPEG images across three initial splits (train, test, val). 
+## Key Technical Features
+* **Architecture:** DenseNet121 (Pre-trained on ImageNet).
+* **Two-Stage Fine-Tuning:** Initial head mapping followed by deep-layer unfreezing with a microscopic learning rate ($10^{-5}$) to prevent catastrophic forgetting.
+* **Overfitting Mitigation:** Incorporates L2 Regularisation ($\lambda = 0.001$), $0.5$ Dropout, and domain-aware data augmentation (preserving anatomical left/right validity).
+* **Dynamic Optimisation:** Uses `ReduceLROnPlateau` to monitor validation gradients and automatically adjust the learning rate to ensure smooth convergence.
+* **Class Balancing:** Algorithmic class weights applied during the gradient descent phase to heavily penalise False Positives, dramatically improving the clinical specificity of the model.
+* **Explainable AI (Grad-CAM):** Integrated focal heatmap visualisations. Utilises strict mathematical thresholding and pure red perceptual overlays to pinpoint pulmonary opacities, ensuring clinical trust.
 
-**Note on Validation:** To ensure statistical significance and prevent validation metric instability, this pipeline programmatically merges the training data and performs a robust 80/20 training/validation split, bypassing the dataset's notoriously small default validation folder.
+## Pipeline Structure
+1. `preprocessing.py` / Data Block: Initialises `ImageDataGenerator` with DenseNet-specific pixel normalisation.
+2. `Model Construction`: Assembles the frozen base and regularised custom head.
+3. `Stage 1 Training`: Rapid convergence of the dense layers using a standard learning rate.
+4. `Stage 2 Fine-Tuning`: Unfreezing the top 15 convolutional layers for domain-specific feature extraction.
+5. `Evaluation`: Generation of Accuracy/Loss curves, Scikit-Learn Classification Reports, and Seaborn Confusion Matrices.
+6. `Explainability (Grad-CAM)`: Generates thresholded heatmap overlays on test images to verify the anatomical regions driving the model's predictions.
 
-## Prerequisites
-Ensure you have Python 3.8+ installed along with the following dependencies:
+## Usage
+To run the pipeline, ensure the Kaggle Chest X-Ray dataset is downloaded and the paths (`TRAIN_DIR`, `TEST_DIR`) are configured in the notebook.
 
-```bash
-pip install tensorflow numpy pandas matplotlib seaborn scikit-learn kagglehub
+Execute the Jupyter Notebook sequentially. The final cells will evaluate the model, generate the focal Grad-CAM visualisations, and export the fully trained model as `pneumonia_densenet_v2_finetuned.keras` for immediate deployment.
 
-```
-
-## Key Features & Pipeline Modules
-
-### 1. Automated Data Acquisition
-
-The project utilises `kagglehub` to seamlessly download and extract the dataset, eliminating the need for manual API key management or local zip extraction.
-
-### 2. Modular Architecture Factory
-
-The codebase separates architectural construction from the training logic, allowing for rapid experimentation. The models included are:
-
-* **Basic CNN:** A shallow baseline (1 Conv block) for rapid prototyping.
-* **Medium CNN:** Increased depth (3 Conv blocks) to capture complex spatial hierarchies.
-* **Advanced CNN:** A 4-block network utilising L2 Regularisation ($\lambda = 10^{-4}$), Batch Normalisation, and heavy Dropout ($0.6$) to combat overfitting. It also employs **Class Weights** to mitigate the dataset's heavy bias towards the Pneumonia class.
-* **Transfer Learning (DenseNet121):** The flagship model of this repository. It leverages a pre-trained DenseNet base (frozen) with a custom classification head, achieving state-of-the-art precision and recall.
-
-### 3. Advanced Evaluation & Tuning
-
-The evaluation suite automatically generates:
-
-* Training vs. Validation Accuracy and Loss plots.
-* Scikit-learn Classification Reports (Precision, Recall, F1-Score).
-* Seaborn Confusion Matrices.
-* **Decision Threshold Tuning:** Scripts to interactively adjust the classification threshold (e.g., from `0.5` to `0.7`) to optimise the trade-off between True Negatives and False Positives without requiring model retraining.
-
-## Usage Instructions
-
-### Step 1: Download Data and Configure Paths
-
-Run the initial setup to download the data and instantiate the `tf.data.Dataset` objects with an 80/20 split and performance prefetching (`tf.data.AUTOTUNE`).
-
-### Step 2: Build and Train a Model
-
-Call the model factory and the training wrapper. For example, to train the DenseNet Transfer Learning model:
-
-```python
-# Build
-model_transfer = build_transfer_model(dropout_rate=0.4)
-
-# Train
-history_transfer = compile_and_train(
-    model_transfer, 
-    train_ds, 
-    val_ds, 
-    learning_rate=0.001, 
-    epochs=15
-)
-
-```
-
-### Step 3: Evaluate Results
-
-Pass the trained model and history object into the evaluation function to generate the performance metrics and visualisations.
-
-```python
-evaluate_model(model_transfer, "DenseNet121_Transfer", history_transfer)
-
-```
-
-## Key Findings
-
-* **Overfitting:** Custom CNNs trained from scratch on this dataset exhibit rapid overfitting. Regularisation (L2, Dropout) successfully smooths the loss curves but reveals a secondary issue: Majority Class Bias.
-* **Class Collapse:** Due to class imbalance, basic models often predict "Pneumonia" for almost all inputs, resulting in a high False Positive rate.
-* **Transfer Learning Superiority:** The DenseNet121 architecture, combined with Decision Threshold tuning ($\tau = 0.7$), provides the optimal solution. It significantly increases True Negatives (correctly identifying healthy patients) while maintaining near-perfect True Positives (identifying pneumonia).
-
-```
-
-```
+## Requirements
+* Python 3.8+
+* TensorFlow 2.x
+* NumPy, Pandas, Matplotlib, Seaborn, Scikit-Learn
