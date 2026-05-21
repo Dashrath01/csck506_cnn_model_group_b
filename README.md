@@ -26,7 +26,9 @@ To run the pipeline, ensure the Kaggle Chest X-Ray dataset is downloaded and the
 
 Execute the Jupyter Notebook sequentially. The final cells will evaluate the model, generate the focal Grad-CAM visualisations, and export the fully trained model as `pneumonia_densenet_v2_finetuned.keras` for immediate deployment.
 
+<<<<<<< HEAD
 ## Requirements
 * Python 3.8+
 * TensorFlow 2.x
 * NumPy, Pandas, Matplotlib, Seaborn, Scikit-Learn
+=======
