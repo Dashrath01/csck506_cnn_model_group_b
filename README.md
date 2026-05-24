@@ -1,4 +1,4 @@
-# Chest X-Ray Pneumonia Detection Suite from Group B
+# Chest X-Ray Pneumonia Detection Suite Group B
 
 A comprehensive, production-ready deep learning repository for the binary classification of Pneumonia vs. Normal chest X-rays. This suite spans foundational CNN architectures, advanced Transfer Learning, Explainable AI (XAI), and rigorous statistical model testing.
 
@@ -41,8 +41,8 @@ Ensure the [Kaggle Chest X-Ray Dataset (Paul Mooney)](https://www.kaggle.com/dat
 2. **Train the Expert Model:** Execute `transfer-learning-dense_net_cnn_DB.ipynb` sequentially to train the highly-regulated DenseNet model and generate Grad-CAM clinical visualisations.
 3. **Compare Models:** Load your trained models (`.keras` or `.h5` files) into `Test_AMR.ipynb` to run the statistical testing battery and determine the definitive best-performing network.
 
-## 🛠️ Requirements
+## Requirements
 * Python 3.8+
-* TensorFlow 2.21.0 / Keras
+* TensorFlow 2.x / Keras
 * NumPy, Pandas, Matplotlib, Seaborn
 * Scikit-Learn, Statsmodels (for McNemar's testing)
