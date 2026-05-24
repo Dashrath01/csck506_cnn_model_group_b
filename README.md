@@ -1,6 +1,6 @@
-# Chest X-Ray Pneumonia Detection Suite Group B
+# Chest X-Ray Pneumonia Detection Suite
 
-A comprehensive, production-ready deep learning repository for the binary classification of Pneumonia vs. Normal chest X-rays. This suite spans foundational CNN architectures, advanced Transfer Learning, Explainable AI (XAI), and rigorous statistical model testing.
+A comprehensive deep learning repository for the binary classification of Pneumonia vs. Normal chest X-rays. This suite spans foundational CNN architectures, advanced Transfer Learning, Explainable AI (XAI), and rigorous statistical model testing.
 
 ## Overview
 This repository addresses the primary challenges of medical image classification—class imbalance, overfitting, and the "black-box" nature of deep learning. It provides a complete workflow: from exploratory custom CNNs and class-weighting strategies to an advanced **DenseNet121** pipeline, culminating in a robust statistical testing suite to directly compare model efficacies.
@@ -9,9 +9,9 @@ This repository addresses the primary challenges of medical image classification
 
 ### 1. Advanced Transfer Learning & XAI (`transfer-learning-dense_net_cnn_DB.ipynb`)
 The flagship model of the repository, featuring a highly tuned two-stage pipeline:
-* **Two-Stage Fine-Tuning:** * *Stage 1:* Custom head training (Adam, LR=10^{-3}) dynamically controlled via `ReduceLROnPlateau` (factor=0.3, min_lr=10^{-6}) and `EarlyStopping` (patience=6).
-  * *Stage 2:* Mathematical unfreezing of the final Dense Block (starting precisely at layer `conv5_block1_0_bn`) using a microscopic learning rate (10^{-5}) to capture radiographic textures without catastrophic forgetting.
-* **Overfitting Mitigation:** Relaxed L2 Regularisation (\lambda = 10^{-4}), 0.5 Dropout, and domain-aware augmentation.
+* **Two-Stage Fine-Tuning:** * *Stage 1:* Custom head training (Adam, LR=10<sup>-3</sup>) dynamically controlled via `ReduceLROnPlateau` (factor=0.3, min_lr=10<sup>-6</sup>) and `EarlyStopping` (patience=6).
+  * *Stage 2:* Mathematical unfreezing of the final Dense Block (starting precisely at layer `conv5_block1_0_bn`) using a microscopic learning rate (10<sup>-5</sup>) to capture radiographic textures without catastrophic forgetting.
+* **Overfitting Mitigation:** Relaxed L2 Regularisation (λ = 10<sup>-4</sup>), 0.5 Dropout, and domain-aware augmentation.
 * **Class Balancing:** Algorithmic class weights (Normal: 1.94, Pneumonia: 0.67).
 * **Explainability (Grad-CAM):** Utilises strict mathematical thresholding (top 30% activations only) and pure red perceptual overlays to pinpoint pulmonary opacities.
 
