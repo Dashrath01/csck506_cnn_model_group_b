@@ -43,6 +43,6 @@ Ensure the [Kaggle Chest X-Ray Dataset (Paul Mooney)](https://www.kaggle.com/dat
 
 ## Requirements
 * Python 3.8+
-* TensorFlow 2.x / Keras
+* TensorFlow 2.21 / Keras
 * NumPy, Pandas, Matplotlib, Seaborn
 * Scikit-Learn, Statsmodels (for McNemar's testing)
